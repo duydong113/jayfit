@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0b">
+<title>FORGE — Tập tại nhà</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo">FORGE<span>.</span></div>
+  <div class="streak" id="streakPill" title="Chuỗi ngày tập liên tiếp">0 ngày 🔥</div>
+</header>
+
+<main id="views">
+
+  <!-- HÔM NAY -->
+  <section class="view active" id="view-today"></section>
+
+  <!-- LỊCH TUẦN -->
+  <section class="view" id="view-week"></section>
+
+  <!-- THƯ VIỆN BÀI TẬP -->
+  <section class="view" id="view-library"></section>
+
+  <!-- TIẾN TRÌNH -->
+  <section class="view" id="view-progress"></section>
+
+  <!-- CÀI ĐẶT -->
+  <section class="view" id="view-settings"></section>
+
+</main>
+
+<nav class="tabbar">
+  <button class="tab active" data-view="today">
+    <svg viewBox="0 0 24 24"><path d="M13 3 4 14h6l-1 7 9-11h-6l1-7z"/></svg>
+    <span>Hôm nay</span>
+  </button>
+  <button class="tab" data-view="week">
+    <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+    <span>Lịch tuần</span>
+  </button>
+  <button class="tab" data-view="library">
+    <svg viewBox="0 0 24 24"><path d="M4 19V6a1 1 0 0 1 1-1h13v13H5a1 1 0 0 1-1-1zm0 0a1 1 0 0 1 1-1h13M9 8h6"/></svg>
+    <span>Bài tập</span>
+  </button>
+  <button class="tab" data-view="progress">
+    <svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>
+    <span>Tiến trình</span>
+  </button>
+  <button class="tab" data-view="settings">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.07-.4.1-.8.1-1.2z"/></svg>
+    <span>Cài đặt</span>
+  </button>
+</nav>
+
+<!-- MODAL: CHI TIẾT BÀI TẬP -->
+<div class="overlay" id="exModal">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div id="exModalBody"></div>
+    <button class="btn ghost full" id="exModalClose">Đóng</button>
+  </div>
+</div>
+
+<!-- MODAL: BẤM GIỜ NGHỈ -->
+<div class="overlay" id="timerModal">
+  <div class="sheet timer-sheet">
+    <div class="sheet-handle"></div>
+    <h3>Nghỉ giữa hiệp</h3>
+    <div class="timer-display" id="timerDisplay">01:00</div>
+    <div class="timer-presets">
+      <button class="chip" data-t="30">30s</button>
+      <button class="chip" data-t="60">60s</button>
+      <button class="chip" data-t="90">90s</button>
+    </div>
+    <div class="timer-controls">
+      <button class="btn ghost" id="timerMinus">−10s</button>
+      <button class="btn primary" id="timerToggle">Bắt đầu</button>
+      <button class="btn ghost" id="timerPlus">+10s</button>
+    </div>
+    <button class="btn ghost full" id="timerClose">Đóng</button>
+  </div>
+</div>
+
+<!-- MODAL: ONBOARDING -->
+<div class="overlay show" id="onboardModal" style="display:none">
+  <div class="sheet onboard">
+    <h2>Chào mừng đến FORGE<span class="dot">.</span></h2>
+    <p class="muted">Lịch tập tại nhà cho người skinny-fat: tăng cơ, giảm mỡ, săn chắc.</p>
+    <label>Tên của bạn
+      <input type="text" id="obName" placeholder="VD: Jay">
+    </label>
+    <div class="row2">
+      <label>Chiều cao (cm)
+        <input type="number" id="obHeight" value="178" min="140" max="220">
+      </label>
+      <label>Cân nặng (kg)
+        <input type="number" id="obWeight" value="65.5" step="0.5" min="35" max="150">
+      </label>
+    </div>
+    <label>Số buổi tập / tuần
+      <select id="obDays">
+        <option value="6" selected>6 buổi + 1 ngày nghỉ</option>
+        <option value="5">5 buổi + 2 ngày nghỉ</option>
+      </select>
+    </label>
+    <label>Dụng cụ hiện có
+      <select id="obEquip">
+        <option value="" selected>Chỉ tập bodyweight</option>
+        <option value="band">Có dây kháng lực</option>
+        <option value="db">Có tạ đơn</option>
+        <option value="band,db">Có cả hai</option>
+      </select>
+    </label>
+    <button class="btn primary full" id="obStart">Tạo lịch tập của tôi</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
